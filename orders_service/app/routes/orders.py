@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..models.order import Order
@@ -27,6 +27,17 @@ async def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     db.refresh(new_order)
 
     return new_order
+
+
+@router.get("/{order_id}", response_model=OrderResponse)
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    """Buscar pedido por ID"""
+    order = db.query(Order).filter(Order.id == order_id).first()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    return order
 
 
 @router.get("", response_model=List[OrderResponse])
