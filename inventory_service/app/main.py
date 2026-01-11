@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from .database import init_db
 from .config import settings
+from .routers import products
 
 
 @asynccontextmanager
@@ -12,6 +13,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Inventory Service", version="1.0.0", lifespan=lifespan)
+
+app.include_router(products.router)
 
 
 @app.get("/health")
