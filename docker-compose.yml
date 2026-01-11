@@ -43,3 +43,15 @@ services:
       POSTGRES_PASSWORD: inventory_pass
     ports:
       - "5433:5432"
+
+  inventory_service:
+    build:
+      context: ./inventory_service
+      dockerfile: Dockerfile
+    container_name: inventory_service
+    ports:
+      - "8002:8000"
+    depends_on:
+      inventory_db:
+        condition: service_started
+    restart: on-failure
