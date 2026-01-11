@@ -21,6 +21,18 @@ services:
     ports:
       - "5432:5432"
 
+  orders_service:
+    build:
+      context: ./orders_service
+      dockerfile: Dockerfile
+    container_name: orders_service
+    ports:
+      - "8001:8000"
+    depends_on:
+      orders_db:
+        condition: service_started
+    restart: on-failure
+
   # Postgres - Inventory
   inventory_db:
     image: postgres:15
