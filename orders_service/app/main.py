@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
+from .services.messaging import messaging_service
 from .database import init_db
 from .routes import orders
 from .config import settings
@@ -9,7 +10,11 @@ from .config import settings
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    await messaging_service.connect()
     yield
+
+    # Shutdown
+    await messaging_service.disconnect()
 
 
 app = FastAPI(title="Orders Service", version="1.0.0", lifespan=lifespan)
