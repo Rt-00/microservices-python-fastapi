@@ -159,8 +159,8 @@ microservices/
 ### 1. Clone o repositório
 
 ```bash
-git clone <seu-repositorio>
-cd microservices
+git clone https://github.com/Rt-00/microservices-python-fastapi.git
+cd microservices-python-fastapi
 ```
 
 ### 2. Inicie os serviços
