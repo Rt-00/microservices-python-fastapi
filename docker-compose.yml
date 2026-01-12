@@ -65,6 +65,16 @@ services:
         condition: service_started
     restart: on-failure
 
+  # MongoDB - Notifications
+  notifications_db:
+    image: mongo:7
+    container_name: notifications_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: notif_user
+      MONGO_INITDB_ROOT_PASSWORD: notif_pass
+    ports:
+      - "27017:27017"
+
   notifications_service:
     build:
       context: ./notifications_service
@@ -75,4 +85,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      notifications_db:
+        condition: service_started
     restart: on-failure
