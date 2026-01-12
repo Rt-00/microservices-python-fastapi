@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+from .config import settings
+
 
 app = FastAPI(
     title="Notifications Service",
@@ -11,4 +13,5 @@ app = FastAPI(
 def health_check():
     return {
         "status": "healthy",
+        "service": settings.service_name
     }
