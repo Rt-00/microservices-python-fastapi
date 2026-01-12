@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from ..database import get_db
 from ..models.product import Product
-from ..schemas.product import ProductCreate, ProductResponse
+from ..schemas.product import ProductCreate, ProductResponse, ProductUpdate
 
 
 router = APIRouter(prefix="/products", tags=["products"])
@@ -37,3 +37,19 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 def list_products(db: Session = Depends(get_db)):
     """Listar todos os produtos"""
     return db.query(Product).all()
+
+
+@router.patch("/{product_id}/stock", response_model=ProductResponse)
+def update_stock(product_id: int, update: ProductUpdate, db: Session = Depends(get_db)):
+    """Atualizar estoque de um produto"""
+    product = db.query(Product).filter(Product.id == product_id).first()
+
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    product.stock = update.stock
+
+    db.commit()
+    db.refresh(product)
+
+    return product

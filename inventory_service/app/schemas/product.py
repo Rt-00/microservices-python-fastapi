@@ -6,6 +6,10 @@ class ProductCreate(BaseModel):
     stock: int
 
 
+class ProductUpdate(BaseModel):
+    stock: int
+
+
 class ProductResponse(BaseModel):
     id: int
     name: str

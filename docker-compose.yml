@@ -9,6 +9,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Postgres - Orders
   orders_db:
@@ -29,6 +34,8 @@ services:
     ports:
       - "8001:8000"
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       orders_db:
         condition: service_started
     restart: on-failure
@@ -52,6 +59,8 @@ services:
     ports:
       - "8002:8000"
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       inventory_db:
         condition: service_started
     restart: on-failure
