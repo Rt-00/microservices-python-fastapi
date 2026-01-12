@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from .config import settings
 from .database import connect_to_mongo, close_mongo_connection
+from .routers import notifications
 
 
 @asynccontextmanager
@@ -18,6 +19,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+
+app.include_router(notifications.router)
 
 @app.get("/health")
 def health_check():
