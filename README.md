@@ -52,7 +52,7 @@ Este projeto implementa uma arquitetura de microserviços para um sistema de ped
 │  (PostgreSQL)   │─────▶│  Exchange Topic  │─────▶│ Service         │
 │  Port: 8001     │◀─────│  orders_exchange │◀─────│ (PostgreSQL)    │
 └─────────────────┘      └──────────────────┘      │ Port: 8002      │
-                                  │                 └─────────────────┘
+                                  │                └─────────────────┘
                                   │
                                   ▼
                          ┌────────────────┐
