@@ -10,14 +10,15 @@ class MessagingService:
     def __init__(self):
         self.connection = None
         self.channel = None
+        self.exchange = None
 
     async def connect(self):
         """Conectar ao RabbitMQ"""
         self.connection = await aio_pika.connect_robust(settings.rabbitmq_url)
         self.channel = await self.connection.channel()
 
-        # Declarar exchanges
-        await self.channel.declare_exchange(
+        # Declarar exchange
+        self.exchange = await self.channel.declare_exchange(
             "orders", aio_pika.ExchangeType.TOPIC, durable=True
         )
 
@@ -38,7 +39,7 @@ class MessagingService:
         if not self.channel:
             raise Exception("RabbitMQ not connected")
 
-        await self.channel.default_exchange.publish(
+        await self.exchange.publish(
             aio_pika.Message(
                 body=json.dumps(message).encode(),
                 delivery_mode=aio_pika.DeliveryMode.PERSISTENT,
