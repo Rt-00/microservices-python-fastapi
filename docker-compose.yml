@@ -64,3 +64,15 @@ services:
       inventory_db:
         condition: service_started
     restart: on-failure
+
+  notifications_service:
+    build:
+      context: ./notifications_service
+      dockerfile: Dockerfile
+    container_name: notifications_service
+    ports:
+      - "8003:8000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
